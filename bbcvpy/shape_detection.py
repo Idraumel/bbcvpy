@@ -23,9 +23,8 @@ def get_regions(im):
 # get if a pixel is in a scanned region
 def get_pixel_is_known(regions, coords):
     for region in regions:
-        for region_pixel_coords in region:
-            if region_pixel_coords == coords:
-                return True
+        if region.count(coords) > 0:
+            return True
     return False
 
 def scan_region(im, start_coords):
@@ -40,7 +39,7 @@ def scan_region(im, start_coords):
 
         for neighbor_coords in neighbors_coords:
             # make sure neighbor coords are not out of bounds
-            if neighbor_coords[0] < 0 and neighbor_coords[0] > im.size[0] - 1 and neighbor_coords[1] < 0 and neighbor_coords[1] > im.size[1] - 1:
+            if neighbor_coords[0] < 0 or neighbor_coords[0] > im.size[0] - 1 or neighbor_coords[1] < 0 or neighbor_coords[1] > im.size[1] - 1:
                 continue
 
             pixel = im.getpixel(neighbor_coords)

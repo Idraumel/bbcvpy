@@ -19,9 +19,9 @@ YB_G_CHANNEL_MIN = 125
 YB_B_CHANNEL_MAX = 75
 
 # black ball detection
-BB_R_CHANNEL_MAX = 75
-BB_G_CHANNEL_MAX = 75
-BB_B_CHANNEL_MAX = 75
+BB_R_CHANNEL_MAX = 50
+BB_G_CHANNEL_MAX = 50
+BB_B_CHANNEL_MAX = 50
 
 # white ball detection
 WB_R_CHANNEL_MIN = 175
@@ -34,6 +34,8 @@ clock_manager = ClockManager()
 
 im = Image.open(f"{INPUT_PATH}/light-blue_clear_1.png")
 im = im.convert("RGB")
+
+# TODO : Remove outside region
 
 # STEP 1 : create masks for balls of each color
 red_ball_mask = Image.new("1", im.size, 0)
@@ -75,12 +77,23 @@ print(f"Execution time for color mask creation : {execution_time} sec")
 
 # STEP 2 : Scan binary images for regions
 # TODO : Execute for each ball color
-clock_manager.start_clock()
-regions = shape_detection.get_regions(red_ball_mask)
-execution_time = clock_manager.stop_clock()
-print(f"Execution time for red ball mask region scanning : {execution_time} sec")
-print(f"\t number of found regions : {len(regions)}")
-shape_detection.print_regions_metadata(regions)
+def scan_regions(im):
+    clock_manager.start_clock()
+    regions = shape_detection.get_regions(im)
+    execution_time = clock_manager.stop_clock()
+    print(f"Execution time for region scanning : {execution_time} sec")
+    print(f"\t number of found regions : {len(regions)}")
+    shape_detection.print_regions_metadata(regions)
+    return regions
+
+print("Red ball mask")
+red_regions = scan_regions(red_ball_mask)
+print("Yellow ball mask")
+yellow_regions = scan_regions(yellow_ball_mask)
+print("Black ball mask")
+black_regions = scan_regions(black_ball_mask)
+print("White ball mask")
+white_regions = scan_regions(white_ball_mask)
 
 # TODO : Build a class which represents output data of image processing - regions and all of their metadata
 
