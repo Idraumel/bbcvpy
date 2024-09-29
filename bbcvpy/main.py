@@ -1,5 +1,5 @@
 from PIL import Image
-from clock_manager import ClockManager
+from util.clock_manager import ClockManager
 import shape_detection
 
 #---------------CONSTANTS---------------#
